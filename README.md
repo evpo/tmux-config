@@ -8,7 +8,7 @@ Download:
 
 Copy tmux config to home:
 
-    ln -s ~/.tmux/.tmux.conf ~/.tmux.conf
+    ln -s ~/.tmux/tmux.conf ~/.tmux.conf
 
 Go to config dir:
 
