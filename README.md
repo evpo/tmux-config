@@ -4,7 +4,7 @@
 
 Download:
 
-    git clone https://github.com/evpo/tmux-config.git ~/.tmux
+    git clone git@github.com:evpo/tmux-config.git ~/.tmux
 
 Copy tmux config to home:
 
