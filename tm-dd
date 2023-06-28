@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+session_name="dd"
+if [[ -z "$TMUX" ]]; then
+    echo "not in tmux"
+    exit 1
+fi
+
+dd_before="$(tmux show-options -s -v @dd_before)"
+if [[ -n "${dd_before}" ]]; then
+    tmux set-option -s -u @dd_before
+    tmux switch-client -t ${dd_before}
+    exit 0
+fi
+
+if ! tmux has-session -t=$session_name 2> /dev/null ; then
+  tmux new-session -d -s "$session_name"
+fi
+
+prev_session=$(tmux list-panes -t "$TMUX_PANE" -F '#S' | head -n1)
+tmux set-option -s @dd_before ${prev_session}
+tmux switch-client -t "$session_name"
