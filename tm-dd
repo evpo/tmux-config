@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-session_name="dd"
+session_name="drop-down"
 if [[ -z "$TMUX" ]]; then
     echo "not in tmux"
     exit 1
@@ -12,10 +12,18 @@ if [[ -n "${dd_before}" ]]; then
     exit 0
 fi
 
-if ! tmux has-session -t=$session_name 2> /dev/null ; then
-  tmux new-session -d -s "$session_name"
+prev_session=$(tmux list-panes -t "$TMUX_PANE" -F '#S' | head -n1)
+
+if [[ "${prev_session}" == "${session_name}" ]]; then
+    echo "already in ${session_name}"
+    exit 0
 fi
 
-prev_session=$(tmux list-panes -t "$TMUX_PANE" -F '#S' | head -n1)
+if ! tmux has-session -t=$session_name 2> /dev/null ; then
+    tmux new-session -d -s "$session_name"
+fi
+
 tmux set-option -s @dd_before ${prev_session}
 tmux switch-client -t "$session_name"
+tmux set-option status-style bg=brightcyan,fg=black
+tmux set-option status-left "[DropDown]"
